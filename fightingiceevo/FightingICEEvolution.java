@@ -2,11 +2,6 @@ package com.ojcoleman.ahni.experiments.fightingiceevo;
 
 import com.ojcoleman.ahni.evaluation.HyperNEATFitnessFunction;
 
-/**
- * Corresponds to tasks 1.1 and 1.2 in Oliver J. Coleman, "Evolving Neural Networks for Visual Processing",
- * Undergraduate Honours Thesis (Bachelor of Computer Science), 2010. The number of small squares is hard coded in
- * variable numSmallSquares.
- */
 public class FightingICEEvolution extends HyperNEATFitnessFunction {
 
     public void init(Properties props) {
