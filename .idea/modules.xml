@@ -3,8 +3,8 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Agent Actions/Agent Actions.iml" filepath="$PROJECT_DIR$/Agent Actions/Agent Actions.iml" />
-      <module fileurl="file://$PROJECT_DIR$/FightingICE/FightingICE.iml" filepath="$PROJECT_DIR$/FightingICE/FightingICE.iml" />
-      <module fileurl="file://$PROJECT_DIR$/FightingICE Neuroevolution.iml" filepath="$PROJECT_DIR$/FightingICE Neuroevolution.iml" />
+      <module fileurl="file://C:\Users\robbi\Documents\Github\FightingICE-neuroevolution\FightingICE\FightingICE.iml" filepath="C:\Users\robbi\Documents\Github\FightingICE-neuroevolution\FightingICE\FightingICE.iml" />
+      <module fileurl="file://$PROJECT_DIR$/FightingICE-neuroevolution.iml" filepath="$PROJECT_DIR$/FightingICE-neuroevolution.iml" />
       <module fileurl="file://$PROJECT_DIR$/NE Agent/NE Agent.iml" filepath="$PROJECT_DIR$/NE Agent/NE Agent.iml" />
     </modules>
   </component>
