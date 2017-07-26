@@ -1,17 +1,1 @@
 out/*
-ahni/*
-!ahni/.gitignore
-!ahni/properties
-ahni/properties/*
-!ahni/properties/fightingice-evo.properties
-!ahni/src
-ahni/src/*
-!ahni/src/com
-ahni/src/com/*
-!ahni/src/com/ojcoleman
-ahni/src/com/ojcoleman/*
-!ahni/src/com/ojcoleman/ahni
-ahni/src/com/ojcoleman/ahni/*
-!ahni/src/com/ojcoleman/ahni/experiments
-ahni/src/com/ojcoleman/ahni/experiments/*
-!ahni/src/com/ojcoleman/ahni/experiments/fightingiceevo

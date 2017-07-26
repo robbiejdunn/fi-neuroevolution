@@ -1,0 +1,16 @@
+/*
+!/.gitignore
+!/properties
+/properties/*
+!/properties/fightingice-evo.properties
+!/src
+/src/*
+!/src/com
+/src/com/*
+!/src/com/ojcoleman
+/src/com/ojcoleman/*
+!/src/com/ojcoleman/ahni
+/src/com/ojcoleman/ahni/*
+!/src/com/ojcoleman/ahni/experiments
+/src/com/ojcoleman/ahni/experiments/*
+!/src/com/ojcoleman/ahni/experiments/fightingiceevo
