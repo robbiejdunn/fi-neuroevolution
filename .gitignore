@@ -1,5 +1,6 @@
 out/*
 ahni/*
+!ahni/.git
 !ahni/properties
 ahni/properties/*
 !ahni/properties/fightingice-evo.properties
