@@ -1,5 +1,7 @@
 /*
 !/.gitignore
+!/LICENSE.txt
+!/README.md
 !/properties
 /properties/*
 !/properties/fightingice-evo.properties
