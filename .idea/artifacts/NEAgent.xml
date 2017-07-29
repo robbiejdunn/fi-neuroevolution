@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="NEAgent">
+    <output-path>$PROJECT_DIR$/FightingICE/data/ai</output-path>
+    <root id="archive" name="NEAgent.jar">
+      <element id="module-output" name="NE Agent" />
+    </root>
+  </artifact>
+</component>

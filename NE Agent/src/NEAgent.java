@@ -6,10 +6,7 @@ import structs.GameData;
 import structs.Key;
 import structs.MotionData;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Arrays;
@@ -28,7 +25,8 @@ public class NEAgent implements AIInterface {
     // Socket for communication with AHNI
     private Socket socket;              // client socket to comm with ahni server socket
     private BufferedReader socketIn;    // read messages received from server
-    private PrintWriter socketOut;      // send messages to server socket
+//    private PrintWriter socketOut;      // send messages to server socket
+    private ObjectOutputStream socketOut;
 
     boolean p;          // player number (bool)
     GameData gd;        // game data
@@ -61,10 +59,19 @@ public class NEAgent implements AIInterface {
     public void processing() {
         if (!fd.getEmptyFlag()) {
             if (fd.getRemainingTimeMilliseconds() > 0) {
-                double[] in = new double[9];
-                in = getNormalisedInputs();
+                if ((fd.getRemainingFramesNumber() % 5) == 0) {
+                    // Sending inputs
+                    double[] stimuli = getNormalisedInputs();
+                    try {
+                        socketOut.writeObject(stimuli);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+
 //                System.out.println(Arrays.toString(getNormalisedInputs()));
-                socketOut.println(Arrays.toString(in));
+//                socketOut.println(Arrays.toString(in));
 
 //                //  In order to get CancelAbleFrame's information on the current action of the opponent character, first you write as follows:
 //                Action oppAct = cc.getEnemyCharacter().getAction();
@@ -90,6 +97,7 @@ public class NEAgent implements AIInterface {
 
     @Override
     public void close() {
+//        socketOut.println("fin");              // end AHNI evaluation
         System.out.println("Game closed.");
     }
 
@@ -105,7 +113,8 @@ public class NEAgent implements AIInterface {
             System.out.println("Initialising client socket...");
             socket = new Socket("localhost", 4444);
             socketIn = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            socketOut = new PrintWriter(socket.getOutputStream(), true);
+//            socketOut = new PrintWriter(socket.getOutputStream(), true);
+            socketOut = new ObjectOutputStream(socket.getOutputStream());
             System.out.println("Client socket initialised.");
         } catch (UnknownHostException e) {
             e.printStackTrace();

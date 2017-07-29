@@ -5,6 +5,7 @@
 !/properties
 /properties/*
 !/properties/fightingice-evo.properties
+!/properties/fightingice-test.properties
 !/src
 /src/*
 !/src/com
