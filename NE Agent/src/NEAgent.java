@@ -59,11 +59,21 @@ public class NEAgent implements AIInterface {
     public void processing() {
         if (!fd.getEmptyFlag()) {
             if (fd.getRemainingTimeMilliseconds() > 0) {
-                if ((fd.getRemainingFramesNumber() % 5) == 0) {
+                if ((fd.getRemainingFramesNumber() % 10) == 0 && fd.getRemainingFramesNumber() != 0) {
+                    // End evolution
+                    if (fd.getRemainingFramesNumber() == 10) {
+                        try {
+                            // Send fitness to AHNI (1000 is max health loss)
+                            socketOut.writeInt((cc.getMyHP() - cc.getEnemyHP() + 1000));
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
                     // Sending inputs
                     double[] stimuli = getNormalisedInputs();
                     try {
                         socketOut.writeObject(stimuli);
+
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -161,6 +171,12 @@ public class NEAgent implements AIInterface {
         // TODO Extend with motion data inputs & projectiles etc.
         // TODO Extend with input to determine enemy character?
         return in;
+    }
+
+    private void setActions(double[] response) {
+        for (double r : response) {
+
+        }
     }
 
 }

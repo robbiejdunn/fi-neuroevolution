@@ -63,7 +63,6 @@ public class ActionSwitch implements AIInterface {
             case 5: actionString = "CROUCH_A";
                     break;
             case 6: actionString = "STAND_D_DF_FC";
-
         }
 
         System.out.println("Action " + actionString + " selected.");

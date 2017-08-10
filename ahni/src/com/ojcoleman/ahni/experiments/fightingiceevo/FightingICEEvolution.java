@@ -44,7 +44,6 @@ public class FightingICEEvolution extends HyperNEATFitnessFunction {
     protected double evaluate(Chromosome genotype, Activator activator, int threadIndex) {
         System.out.println("Genotype evaluation beginning");
         double fitness = 0;
-
         try {
             System.out.println("Beginning FightingICE process");
             // Begin FightingICE in preparation for genotype evaluation
@@ -67,13 +66,35 @@ public class FightingICEEvolution extends HyperNEATFitnessFunction {
             while (true) {
                 double[] stimuli;
                 if ((stimuli = (double[]) in.readObject()) != null) {
+                    System.out.println("TEST");
                     System.out.println("Array received: " + Arrays.toString(stimuli));
-                    System.out.println("Activator inputs " + activator.getInputDimension().toString() +
+                    System.out.println("Activator inputs " + Arrays.toString(activator.getInputDimension()) +
                         ", count " + activator.getInputCount());
-                    System.out.println("Act outputs " + activator.getOutputDimension().toString() +
+                    System.out.println("Act outputs " + Arrays.toString(activator.getOutputDimension()) +
                         ", count " + activator.getOutputCount());
-                    double[] response = activator.next(stimuli);
+                    double[] response1 = activator.next(stimuli);
+                    System.out.println("Test1: " + Arrays.toString(response1));
+                    double[] response2 = activator.next(stimuli);
+                    System.out.println("Test2: " + Arrays.toString(response2));
+//                    double[][] binIn = {{0,0,1,1,0,0,0,1,1}};
+//                    System.out.println("Test 3 : " + Arrays.toString(activator.next(binIn)[0]));
+                    double[][] tests = new double[stimuli.length][1];
+                    for (int i = 0; i < stimuli.length; i++) {
+                        if (i%2 == 0)
+                            tests[i][0] = 0;
+                        else
+                            tests[i][0] = 1;
+                    }
+                    double[][] response = activator.next(tests);
+                    System.out.println("Activator recurrent? " + activator.isRecurrent());
                     System.out.println("Response: " + Arrays.toString(response));
+                    for (double[] row : response) {
+                        System.out.println(Arrays.toString(row));
+                    }
+                    System.out.println("Max/min response " + activator.getMaxResponse() + " " + activator.getMinResponse());
+                    System.out.println("Activator name " + activator.getName());
+                    activator.dispose();
+                    activator.reset();
                 }
 //                String line;
 //                if ((line = in.readLine()) != null) {
