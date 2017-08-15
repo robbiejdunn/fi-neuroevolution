@@ -9,6 +9,8 @@ import structs.MotionData;
 import java.io.*;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Arrays;
 
 /**
@@ -24,9 +26,16 @@ public class NEAgent implements AIInterface {
 
     // Socket for communication with AHNI
     private Socket socket;              // client socket to comm with ahni server socket
-    private BufferedReader socketIn;    // read messages received from server
+    private ObjectInputStream socketIn;    // read messages received from server
 //    private PrintWriter socketOut;      // send messages to server socket
     private ObjectOutputStream socketOut;
+//    private File logInputs;
+//    private File logOutputs;
+//    private BufferedWriter fightingICELoggerIn;
+//    private BufferedWriter fightingICELoggerOut;
+
+    PrintWriter pwIn;
+    PrintWriter pwOut;
 
     boolean p;          // player number (bool)
     GameData gd;        // game data
@@ -42,6 +51,30 @@ public class NEAgent implements AIInterface {
         inputKey = new Key();
         fd = new FrameData();
         cc = new CommandCenter();
+
+//        logInputs = new File("..\\logs\\in.log");
+//        logOutputs = new File("..\\logs\\out.log");
+//        try {
+//            fightingICELoggerIn = new BufferedWriter(new FileWriter(logInputs));
+//            fightingICELoggerOut = new BufferedWriter(new FileWriter(logOutputs));
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+
+        try {
+            File fin = new File("\\logs\\in.log");
+            File fout = new File("\\logs\\out.log");
+            fin.getParentFile().mkdirs();
+            fin.createNewFile();
+            fout.createNewFile();
+
+            FileWriter fwIn = new FileWriter("\\logs\\in.log");
+            FileWriter fwOut = new FileWriter("\\logs\\out.log");
+            pwIn = new PrintWriter(fwIn);
+            pwOut = new PrintWriter(fwOut);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         initClientSocket();
 
@@ -61,20 +94,35 @@ public class NEAgent implements AIInterface {
             if (fd.getRemainingTimeMilliseconds() > 0) {
                 if ((fd.getRemainingFramesNumber() % 10) == 0 && fd.getRemainingFramesNumber() != 0) {
                     // End evolution
-                    if (fd.getRemainingFramesNumber() == 10) {
+                    if (fd.getRemainingFramesNumber() <= 20) {
                         try {
                             // Send fitness to AHNI (1000 is max health loss)
-                            socketOut.writeInt((cc.getMyHP() - cc.getEnemyHP() + 1000));
+                            double[] fitness = new double[1];
+                            fitness[0] = (double) ((double) (cc.getMyHP() - cc.getEnemyHP() + 1000) / (double) 2000);
+                            socketOut.writeObject(fitness);
+                            close();
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
                     }
-                    // Sending inputs
+
                     double[] stimuli = getNormalisedInputs();
                     try {
+                        // Sending inputs
                         socketOut.writeObject(stimuli);
-
-                    } catch (IOException e) {
+                        double[] responses;
+                        while (true) {
+                            if ((responses = (double[]) socketIn.readObject()) != null) {
+//                                System.out.println("Responses: " + Arrays.toString(responses));
+//                                fightingICELoggerIn.append(Arrays.toString(stimuli));
+//                                fightingICELoggerOut.append(Arrays.toString(responses));
+//                                pwIn.println(Arrays.toString(stimuli));
+//                                pwOut.println(Arrays.toString(responses));
+                                processResponses(responses);
+                                break;
+                            }
+                        }
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
 
@@ -109,6 +157,8 @@ public class NEAgent implements AIInterface {
     public void close() {
 //        socketOut.println("fin");              // end AHNI evaluation
         System.out.println("Game closed.");
+;
+        System.exit(1);
     }
 
     public String getCharacter(){
@@ -122,9 +172,11 @@ public class NEAgent implements AIInterface {
         try {
             System.out.println("Initialising client socket...");
             socket = new Socket("localhost", 4444);
-            socketIn = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 //            socketOut = new PrintWriter(socket.getOutputStream(), true);
+            System.out.println("Initialising socket out");
             socketOut = new ObjectOutputStream(socket.getOutputStream());
+            System.out.println("Initialising socket in");
+            socketIn = new ObjectInputStream(socket.getInputStream());
             System.out.println("Client socket initialised.");
         } catch (UnknownHostException e) {
             e.printStackTrace();
@@ -173,9 +225,40 @@ public class NEAgent implements AIInterface {
         return in;
     }
 
-    private void setActions(double[] response) {
-        for (double r : response) {
+    private void processResponses(double[] responses) {
+        inputKey.empty();
+        // Find max value in array
+        double max = -1;
+        int maxInd = -1;
+        for (int i = 0; i < responses.length; i++) {
+            if (responses[i] > max) {
+                max = responses[i];
+                maxInd = i;
+            }
 
+        }
+        switch (maxInd) {
+            case 0 : inputKey.A = true;
+//                System.out.println("A pressed");
+                break;
+            case 1 : inputKey.B = true;
+//                System.out.println("B Pressed");
+                break;
+            case 2: inputKey.C = true;
+//                System.out.println("C Pressed");
+                break;
+            case 3: inputKey.D = true;
+//                System.out.println("Down pressed");
+                break;
+            case 4: inputKey.U = true;
+//                System.out.println("Up pressed");
+                break;
+            case 5: inputKey.L = true;
+//                System.out.println("Left pressed");
+                break;
+            case 6: inputKey.R = true;
+//                System.out.println("Right pressed");
+                break;
         }
     }
 
