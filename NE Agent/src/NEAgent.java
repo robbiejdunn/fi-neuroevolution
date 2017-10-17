@@ -127,6 +127,16 @@ public class NEAgent implements AIInterface {
                     }
 
                 }
+                else {
+                    inputKey.empty();
+                    inputKey.A = false;
+                    inputKey.B = false;
+                    inputKey.C = false;
+                    inputKey.D = false;
+                    inputKey.L = false;
+                    inputKey.R = false;
+                    inputKey.U = false;
+                }
 
 //                System.out.println(Arrays.toString(getNormalisedInputs()));
 //                socketOut.println(Arrays.toString(in));
@@ -234,6 +244,7 @@ public class NEAgent implements AIInterface {
             if (responses[i] > max) {
                 max = responses[i];
                 maxInd = i;
+//                System.out.println(maxInd);
             }
 
         }

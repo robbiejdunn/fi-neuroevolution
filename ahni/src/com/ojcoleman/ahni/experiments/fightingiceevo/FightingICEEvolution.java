@@ -69,9 +69,9 @@ public class FightingICEEvolution extends HyperNEATFitnessFunction {
                     System.out.println("TEST");
                     System.out.println("Array received: " + Arrays.toString(stimuli));
                     System.out.println("Activator inputs " + Arrays.toString(activator.getInputDimension()) +
-                        ", count " + activator.getInputCount());
+                            ", count " + activator.getInputCount());
                     System.out.println("Act outputs " + Arrays.toString(activator.getOutputDimension()) +
-                        ", count " + activator.getOutputCount());
+                            ", count " + activator.getOutputCount());
                     double[] response1 = activator.next(stimuli);
                     System.out.println("Test1: " + Arrays.toString(response1));
                     double[] response2 = activator.next(stimuli);
@@ -129,4 +129,3 @@ public class FightingICEEvolution extends HyperNEATFitnessFunction {
     }
 
 }
-
