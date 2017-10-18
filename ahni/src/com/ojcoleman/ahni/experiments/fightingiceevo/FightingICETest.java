@@ -52,9 +52,7 @@ public class FightingICETest extends HyperNEATFitnessFunction {
             cs = ss.accept();
             System.out.println("Client socket connected.");
             ObjectInputStream in = new ObjectInputStream(cs.getInputStream());
-            System.out.println("Input stream");
             ObjectOutputStream out = new ObjectOutputStream(cs.getOutputStream());
-            System.out.println("Output stream");
             double[]  stimuli;
             while (true) {
                 Object objin = in.readObject();
@@ -69,7 +67,8 @@ public class FightingICETest extends HyperNEATFitnessFunction {
                         return fitness;
                     }
                     double[] testOut = activator.next(stimuli);
-//                    System.out.println("Responses: " + Arrays.toString(testOut));
+
+                    System.out.println("Responses: " + Arrays.toString(testOut));
 //                    pwIn.println(Arrays.toString(stimuli));
 //                    pwOut.println(Arrays.toString(testOut));
                     out.writeObject(testOut);

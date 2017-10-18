@@ -92,9 +92,7 @@ public class NEAgent implements AIInterface {
     public void processing() {
         if (!fd.getEmptyFlag()) {
             if (fd.getRemainingTimeMilliseconds() > 0) {
-                if ((fd.getRemainingFramesNumber() % 10) == 0 && fd.getRemainingFramesNumber() != 0) {
-                    // End evolution
-                    if (fd.getRemainingFramesNumber() <= 20) {
+                if (fd.getRemainingFramesNumber() <= 20) {      // end evolution
                         try {
                             // Send fitness to AHNI (1000 is max health loss)
                             double[] fitness = new double[1];
@@ -104,8 +102,13 @@ public class NEAgent implements AIInterface {
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
-                    }
+                }
 
+                if (cc.getSkillFlag()) {
+                    inputKey = cc.getSkillKey();
+                } else {
+                    inputKey.empty();
+                    cc.skillCancel();
                     double[] stimuli = getNormalisedInputs();
                     try {
                         // Sending inputs
@@ -125,18 +128,8 @@ public class NEAgent implements AIInterface {
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
+                }
 
-                }
-                else {
-                    inputKey.empty();
-                    inputKey.A = false;
-                    inputKey.B = false;
-                    inputKey.C = false;
-                    inputKey.D = false;
-                    inputKey.L = false;
-                    inputKey.R = false;
-                    inputKey.U = false;
-                }
 
 //                System.out.println(Arrays.toString(getNormalisedInputs()));
 //                socketOut.println(Arrays.toString(in));
@@ -167,7 +160,6 @@ public class NEAgent implements AIInterface {
     public void close() {
 //        socketOut.println("fin");              // end AHNI evaluation
         System.out.println("Game closed.");
-;
         System.exit(1);
     }
 
@@ -209,6 +201,7 @@ public class NEAgent implements AIInterface {
         // NEURAL NETWORK INPUTS (min possible value/max value)
         // TODO Test all lower and upper bounds
         // 1. Agent X position (-800/800)
+        // TODO Could use just distances ? (since actions are reversed depending on side)
         in[0] = ((double) (cc.getMyX() + 800) / (double) 800) - 1;
         // 2. Agent Y position (-465/465)
         in[1] = ((double) (cc.getMyY() + 465) / (double) 465) - 1;
@@ -240,34 +233,38 @@ public class NEAgent implements AIInterface {
         // Find max value in array
         double max = -1;
         int maxInd = -1;
+        System.out.println(responses.length + " output.");
         for (int i = 0; i < responses.length; i++) {
+            System.out.println("Response " + i + " = " + responses[i]);
             if (responses[i] > max) {
+
                 max = responses[i];
                 maxInd = i;
 //                System.out.println(maxInd);
             }
 
         }
+        System.out.println(maxInd);
         switch (maxInd) {
-            case 0 : inputKey.A = true;
+            case 0 : cc.commandCall("4 _ A");
 //                System.out.println("A pressed");
                 break;
-            case 1 : inputKey.B = true;
+            case 1 : cc.commandCall("4 _ B");
 //                System.out.println("B Pressed");
                 break;
-            case 2: inputKey.C = true;
+            case 2: cc.commandCall("A");
 //                System.out.println("C Pressed");
                 break;
-            case 3: inputKey.D = true;
+            case 3: cc.commandCall("B");
 //                System.out.println("Down pressed");
                 break;
-            case 4: inputKey.U = true;
+            case 4: cc.commandCall("2 _ A");
 //                System.out.println("Up pressed");
                 break;
-            case 5: inputKey.L = true;
+            case 5: cc.commandCall("6 _ A");
 //                System.out.println("Left pressed");
                 break;
-            case 6: inputKey.R = true;
+            case 6: cc.commandCall("6 _ B");
 //                System.out.println("Right pressed");
                 break;
         }
