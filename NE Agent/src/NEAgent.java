@@ -196,7 +196,7 @@ public class NEAgent implements AIInterface {
      * them to a range (-1,1)
      */
     private double[] getNormalisedInputs() {
-        double[] in = new double[9];        // normalised inputs for the neural net
+        double[] in = new double[15];        // normalised inputs for the neural net
 
         // NEURAL NETWORK INPUTS (min possible value/max value)
         // TODO Test all lower and upper bounds
@@ -218,11 +218,45 @@ public class NEAgent implements AIInterface {
         in[6] = ((double) cc.getEnemyEnergy() / (double) 500) - 1;
         // 8. Enemy HP (-2000/0)
         in[7] = ((double) (cc.getEnemyHP() + 2000) / (double) 1000) - 1;
-        // 9. Is skill in use? (false/true)
-        if (cc.getSkillFlag() == true)
-            in[8] = 1.0;
+
+        // MOTION DATA
+        Action oppAct = cc.getEnemyCharacter().getAction();
+        MotionData oppMotion;
+        if (p)
+            oppMotion = gd.getPlayerTwoMotion().elementAt(oppAct.ordinal());
         else
-            in[8] = -1.0;
+            oppMotion = gd.getPlayerOneMotion().elementAt(oppAct.ordinal());
+
+        // 9. Is opponent using an attack (false/true)
+        if (oppMotion.getAttackStartUp() > 0 || oppMotion.getAttackActive() > 0)
+            in[8] = 1;
+        else
+            in[8] = -1;
+        // 10. Opponent attack startup frames (0/31)
+        in[9] = (((double) oppMotion.getAttackStartUp() / (double) 31) * 2) - 1;
+        // 11. Opponent attack active frames (0/20)
+        in[10] = ((double) oppMotion.getAttackActive() / (double) 10) - 1;
+        // 12. Attack type- high
+        if (oppMotion.getAttackType() == 1)     // 1-high,2-mid,3-low,4-throw
+            in[11] = 1;
+        else
+            in[11] = -1;
+        // 13. Attack type- middle
+        if (oppMotion.getAttackType() == 2)
+            in[12] = 1;
+        else
+            in[12] = -1;
+        // 14. Attack type- low
+        if (oppMotion.getAttackType() == 3)
+            in[13] = 1;
+        else
+            in[13] = -1;
+        // 15. Attack type- throw
+        if (oppMotion.getAttackType() == 4)
+            in[14] = 1;
+        else
+            in[14] = -1;
+
         // TODO Extend with motion data inputs & projectiles etc.
         // TODO Extend with input to determine enemy character?
         return in;
@@ -235,7 +269,7 @@ public class NEAgent implements AIInterface {
         int maxInd = -1;
         System.out.println(responses.length + " output.");
         for (int i = 0; i < responses.length; i++) {
-            System.out.println("Response " + i + " = " + responses[i]);
+//            System.out.println("Response " + i + " = " + responses[i]);
             if (responses[i] > max) {
 
                 max = responses[i];
@@ -247,25 +281,55 @@ public class NEAgent implements AIInterface {
         System.out.println(maxInd);
         switch (maxInd) {
             case 0 : cc.commandCall("4 _ A");
-//                System.out.println("A pressed");
                 break;
             case 1 : cc.commandCall("4 _ B");
-//                System.out.println("B Pressed");
                 break;
             case 2: cc.commandCall("A");
-//                System.out.println("C Pressed");
                 break;
             case 3: cc.commandCall("B");
-//                System.out.println("Down pressed");
                 break;
             case 4: cc.commandCall("2 _ A");
-//                System.out.println("Up pressed");
                 break;
             case 5: cc.commandCall("6 _ A");
-//                System.out.println("Left pressed");
                 break;
             case 6: cc.commandCall("6 _ B");
-//                System.out.println("Right pressed");
+                break;
+            case 7: cc.commandCall("3 _ A");
+                break;
+            case 8: cc.commandCall("3 _ B");
+                break;
+            case 9: cc.commandCall("2 3 6 _ A");
+                break;
+            case 10: cc.commandCall("2 3 6 _ B");
+                break;
+            case 11: cc.commandCall("2 3 6 _ C");
+                break;
+            case 12: cc.commandCall("6 2 3 _ A");
+                break;
+            case 13: cc.commandCall("6 2 3 _ B");
+                break;
+            case 14: cc.commandCall("2 1 4 _ A");
+                break;
+            case 15: cc.commandCall("2 1 4 _ B");
+                break;
+            // MOVEMENT ACTIONS
+            case 16: cc.commandCall("1");
+                break;
+            case 17: cc.commandCall("2");
+                break;
+            case 18: cc.commandCall("3");
+                break;
+            case 19: cc.commandCall("4");
+                break;
+            case 20: cc.commandCall("5");
+                break;
+            case 21: cc.commandCall("6");
+                break;
+            case 22: cc.commandCall("7");
+                break;
+            case 23: cc.commandCall("8");
+                break;
+            case 24: cc.commandCall("9");
                 break;
         }
     }

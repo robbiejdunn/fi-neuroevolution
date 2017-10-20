@@ -67,7 +67,6 @@ public class FightingICETest extends HyperNEATFitnessFunction {
                         return fitness;
                     }
                     double[] testOut = activator.next(stimuli);
-
                     System.out.println("Responses: " + Arrays.toString(testOut));
 //                    pwIn.println(Arrays.toString(stimuli));
 //                    pwOut.println(Arrays.toString(testOut));

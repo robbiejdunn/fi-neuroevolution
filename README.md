@@ -4,7 +4,10 @@ Implementing an agent using neuroevolution in the FightingICE game framework.
 ## Installation
 In order to run an evolution on your own machine follow the steps below.
 
-# Features
+
+## Implementation
+
+### Features
 
 | ID | Feature | Range | Comments |
 | --- | --- | --- | --- |

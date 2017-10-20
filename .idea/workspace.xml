@@ -8,6 +8,7 @@
   <component name="ChangeListManager">
     <list default="true" id="43ea9c91-38e1-4e91-9837-e22d9ca981e3" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/FightingICE-neuroevolution.iml" afterPath="$PROJECT_DIR$/FightingICE-neuroevolution.iml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/NE Agent/src/NEAgent.java" afterPath="$PROJECT_DIR$/NE Agent/src/NEAgent.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/README.md" afterPath="$PROJECT_DIR$/README.md" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ahni/properties/fightingice-evo.properties" afterPath="$PROJECT_DIR$/ahni/properties/fightingice-evo.properties" />
@@ -26,22 +27,10 @@
       <file leaf-file-name="NEAgent.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/NE Agent/src/NEAgent.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="150">
-              <caret line="203" column="89" lean-forward="false" selection-start-line="203" selection-start-column="89" selection-end-line="203" selection-end-column="89" />
+            <state relative-caret-position="721">
+              <caret line="261" column="18" lean-forward="true" selection-start-line="261" selection-start-column="18" selection-end-line="261" selection-end-column="18" />
               <folding>
                 <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ExponentialTargetFitnessFunction.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/ahni/src/com/anji/integration/ExponentialTargetFitnessFunction.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-225">
-              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-              <folding>
-                <element signature="e#0#4329#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -60,8 +49,8 @@
       <file leaf-file-name="fightingice-evo.properties" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/ahni/properties/fightingice-evo.properties">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="200">
-              <caret line="98" column="38" lean-forward="false" selection-start-line="98" selection-start-column="38" selection-end-line="98" selection-end-column="38" />
+            <state relative-caret-position="25">
+              <caret line="57" column="0" lean-forward="false" selection-start-line="57" selection-start-column="0" selection-end-line="57" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -70,8 +59,8 @@
       <file leaf-file-name="FightingICETest.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/ahni/src/com/ojcoleman/ahni/experiments/fightingiceevo/FightingICETest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="575">
-              <caret line="71" column="18" lean-forward="false" selection-start-line="71" selection-start-column="18" selection-end-line="71" selection-end-column="18" />
+            <state relative-caret-position="546">
+              <caret line="70" column="61" lean-forward="false" selection-start-line="70" selection-start-column="61" selection-end-line="70" selection-end-column="61" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -82,7 +71,7 @@
       <file leaf-file-name="or2.properties" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/ahni/properties/or2.properties">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-2025">
+            <state relative-caret-position="450">
               <caret line="18" column="0" lean-forward="false" selection-start-line="18" selection-start-column="0" selection-end-line="18" selection-end-column="0" />
               <folding />
             </state>
@@ -102,7 +91,7 @@
       <file leaf-file-name="test-pass-through-flip.properties" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/ahni/properties/test-pass-through-flip.properties">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="650">
+            <state relative-caret-position="3875">
               <caret line="155" column="21" lean-forward="false" selection-start-line="155" selection-start-column="21" selection-end-line="155" selection-end-column="21" />
               <folding />
             </state>
@@ -122,7 +111,7 @@
       <file leaf-file-name="TargetFitnessCalculator.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/ahni/src/com/ojcoleman/ahni/evaluation/TargetFitnessCalculator.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
+            <state relative-caret-position="8100">
               <caret line="343" column="5" lean-forward="false" selection-start-line="343" selection-start-column="5" selection-end-line="343" selection-end-column="5" />
               <folding />
             </state>
@@ -177,9 +166,9 @@
         <option value="$PROJECT_DIR$/ahni/src/com/ojcoleman/ahni/experiments/objectrecognition/ObjectRecognitionFitnessFunction2.java" />
         <option value="$PROJECT_DIR$/ahni/properties/fightingice-test.properties" />
         <option value="$PROJECT_DIR$/ahni/src/com/ojcoleman/ahni/experiments/fightingiceevo/FightingICEEvolution.java" />
+        <option value="$PROJECT_DIR$/NE Agent/src/NEAgent.java" />
         <option value="$PROJECT_DIR$/ahni/src/com/ojcoleman/ahni/experiments/fightingiceevo/FightingICETest.java" />
         <option value="$PROJECT_DIR$/ahni/properties/fightingice-evo.properties" />
-        <option value="$PROJECT_DIR$/NE Agent/src/NEAgent.java" />
       </list>
     </option>
   </component>
@@ -212,7 +201,8 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scratches" />
+      <pane id="PackagesPane" />
+      <pane id="AndroidView" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -267,15 +257,6 @@
               <item name="ahni" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="com" type="462c0819:PsiDirectoryNode" />
-              <item name="ojcoleman" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="FightingICE-neuroevolution" type="b2602c69:ProjectViewProjectNode" />
-              <item name="FightingICE-neuroevolution" type="462c0819:PsiDirectoryNode" />
-              <item name="ahni" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="com" type="462c0819:PsiDirectoryNode" />
-              <item name="ojcoleman" type="462c0819:PsiDirectoryNode" />
               <item name="ahni" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
@@ -283,8 +264,7 @@
         </subPane>
       </pane>
       <pane id="Scope" />
-      <pane id="AndroidView" />
-      <pane id="PackagesPane" />
+      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -588,7 +568,7 @@
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.16726404" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3183784" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.33027026" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -807,9 +787,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1375">
           <caret line="63" column="35" lean-forward="false" selection-start-line="63" selection-start-column="35" selection-end-line="63" selection-end-column="35" />
-          <folding>
-            <element signature="imports" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -817,7 +794,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="3525">
           <caret line="142" column="0" lean-forward="false" selection-start-line="142" selection-start-column="0" selection-end-line="142" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -839,7 +815,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/ahni/src/com/ojcoleman/ahni/evaluation/TargetFitnessCalculator.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
+        <state relative-caret-position="8100">
           <caret line="343" column="5" lean-forward="false" selection-start-line="343" selection-start-column="5" selection-end-line="343" selection-end-column="5" />
           <folding />
         </state>
@@ -855,7 +831,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/ahni/src/com/anji/integration/ExponentialTargetFitnessFunction.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-225">
+        <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#0#4329#0" expanded="true" />
@@ -865,7 +841,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/ahni/properties/test-pass-through-flip.properties">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="650">
+        <state relative-caret-position="3875">
           <caret line="155" column="21" lean-forward="false" selection-start-line="155" selection-start-column="21" selection-end-line="155" selection-end-column="21" />
           <folding />
         </state>
@@ -873,34 +849,34 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/ahni/properties/or2.properties">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2025">
+        <state relative-caret-position="450">
           <caret line="18" column="0" lean-forward="false" selection-start-line="18" selection-start-column="0" selection-end-line="18" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ahni/properties/fightingice-evo.properties">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="25">
+          <caret line="57" column="0" lean-forward="false" selection-start-line="57" selection-start-column="0" selection-end-line="57" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/ahni/src/com/ojcoleman/ahni/experiments/fightingiceevo/FightingICETest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="575">
-          <caret line="71" column="18" lean-forward="false" selection-start-line="71" selection-start-column="18" selection-end-line="71" selection-end-column="18" />
+        <state relative-caret-position="546">
+          <caret line="70" column="61" lean-forward="false" selection-start-line="70" selection-start-column="61" selection-end-line="70" selection-end-column="61" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ahni/properties/fightingice-evo.properties">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="200">
-          <caret line="98" column="38" lean-forward="false" selection-start-line="98" selection-start-column="38" selection-end-line="98" selection-end-column="38" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/NE Agent/src/NEAgent.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="203" column="89" lean-forward="false" selection-start-line="203" selection-start-column="89" selection-end-line="203" selection-end-column="89" />
+        <state relative-caret-position="721">
+          <caret line="261" column="18" lean-forward="true" selection-start-line="261" selection-start-column="18" selection-end-line="261" selection-end-column="18" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
