@@ -3,36 +3,51 @@ import os
 import neat
 import visualize
 import random
-
-import sys
 import time
+import sys
+import random
+from time import sleep
 from py4j.java_gateway import JavaGateway, GatewayParameters, CallbackServerParameters, get_field
 
-num_threads = 4
-
 global used
-used = [False] * num_threads
+used = [False, False]
 
 def close_gateway():
 	gateway.close_callback_server()
 	gateway.close()
 
 def evala(genome, config):
-	time.sleep(random.random())
-	net = neat.nn.FeedForwardNetwork.create(genome, config)
-	for i in range(len(used)):
-		if used[i] == False:
-			used[i] = True
-			print('5')
-			managers[i].registerAI("NeatAI", NeatAI(gateways[i], genome, net))
-			print('6')
-			game = managers[i].createGame("ZEN", "ZEN", "NeatAI", "IncStage0")
-			print('7')
-			managers[i].runGame(game)
-			sys.stdout.flush()
-			print('fini')
-			used[i] = False
-			return genome.fitness
+	time.sleep(random.randrange(5))
+	print(used)
+	if used[0] == False:
+		used[0] = True
+		print(used)
+		print('Evaling1')
+		net = neat.nn.FeedForwardNetwork.create(genome, config)
+		manager1.registerAI("NeatAI", NeatAI(gateway1, genome, net))
+		game = manager1.createGame("ZEN", "ZEN", "NeatAI", "IncStage0")
+		manager1.runGame(game)
+		sys.stdout.flush()
+		used[0] = False
+	else:
+		used[1] = True
+		print('Evaling2')
+		net = neat.nn.FeedForwardNetwork.create(genome, config)
+		manager2.registerAI("NeatAI", NeatAI(gateway2, genome, net))
+		game = manager2.createGame("ZEN", "ZEN", "NeatAI", "IncStage0")
+		manager2.runGame(game)
+		sys.stdout.flush()
+		used[1] = False
+
+	return 1.0
+
+def eval_genomes(genomes, config):
+	for genome_id, genome in genomes:
+		net = neat.nn.FeedForwardNetwork.create(genome, config)
+		manager.registerAI("NeatAI", NeatAI(gateway, genome, net))
+		game = manager.createGame("ZEN", "ZEN", "NeatAI", "IncStage0")
+		manager.runGame(game)
+		sys.stdout.flush()
 
 def run(config_file):
 	# Load NEAT configuration
@@ -42,7 +57,6 @@ def run(config_file):
 
 	# Create the population.
 	p = neat.Population(config)
-	# p = neat.Checkpointer.restore_checkpoint('evo-stationary/neat-checkpoint-4')
 
 	# stdout reporter to show progress in terminal.
 	p.add_reporter(neat.StdOutReporter(True))
@@ -50,9 +64,8 @@ def run(config_file):
 	# Reporter to write training/evolution statistics to files.
 	p.add_reporter(stats)
 	# Checkpointer to write evolution state to file every 5 gens.
-	p.add_reporter(neat.Checkpointer(1))
-
-	x = neat.threaded.ThreadedEvaluator(num_threads, evala)
+	p.add_reporter(neat.Checkpointer(2))
+	x = neat.threaded.ThreadedEvaluator(2, evala)
 	# x = neat.parallel.ParallelEvaluator(2, evala)
 	# Run evolution for 300 generations.
 	winner = p.run(x.evaluate, 5)
@@ -100,11 +113,12 @@ class NeatAI(object):
 	def processing(self):
 		if self.frameData.getEmptyFlag() or self.frameData.getRemainingTime() <= 0:
 			return
+
 		if self.cc.getSkillFlag():
 			self.inputKey = self.cc.getSkillKey()
 			return
 
-		if (self.frameData.getRemainingTimeMilliseconds() < 1000 or self.frameData.getRemainingFramesNumber() < 500) and self.frameData.getRound() == self.roundNum:
+		if self.frameData.getRemainingTimeMilliseconds() < 1000 and self.frameData.getRound() == self.roundNum:
 			#hpDiff = self.cc.getMyHP() - self.cc.getEnemyHP()
 			#if hpDiff >= 0:
 			#	self.results[self.roundNum] = hpDiff * 1000
@@ -121,13 +135,12 @@ class NeatAI(object):
 				self.genome.fitness = sum(self.results) / 3
 				self.close()
 			self.roundNum += 1
-
-
 		if self.frameData.getFrameNumber() % 10:
 			self.processResponses(self.network.activate(self.getFeatureVector()))
 
 	def getFeatureVector(self):
 		fv = [0] * 26					# Feature vector
+
 		# Features 1-8 : positions, energy and HP
 		fv[0] = ((self.cc.getMyX() + 800) / 800) - 1
 		fv[1] = ((self.cc.getMyY() + 465) / 465) - 1
@@ -267,23 +280,18 @@ class NeatAI(object):
 	class Java:
 		implements = ["gameInterface.AIInterface"]
 
+
 local_dir = os.path.dirname(__file__)
 config_path = os.path.join(local_dir, 'config-fightingice')
 
-gateways = [0] * num_threads
-python_ports = [0] * num_threads
-managers = [0] * num_threads
+gateway1 = JavaGateway(gateway_parameters=GatewayParameters(port=4000), callback_server_parameters=CallbackServerParameters(port=0))
+gateway2 = JavaGateway(gateway_parameters=GatewayParameters(port=4001), callback_server_parameters=CallbackServerParameters(port=1))
+python_port1 = gateway1.get_callback_server().get_listening_port()
+python_port2 = gateway1.get_callback_server().get_listening_port()
+gateway1.java_gateway_server.resetCallbackClient(gateway1.java_gateway_server.getCallbackClient().getAddress(), python_port1)
+gateway2.java_gateway_server.resetCallbackClient(gateway2.java_gateway_server.getCallbackClient().getAddress(), python_port2)
+manager1 = gateway1.entry_point
+manager2 = gateway2.entry_point
 
-# for i in range(num_threads):
-for i in range(num_threads):
-	print('1')
-	gateways[i] = JavaGateway(gateway_parameters=GatewayParameters(port=(4000 + i)), callback_server_parameters=CallbackServerParameters(port=0))
-	print('2')
-	python_ports[i] = gateways[i].get_callback_server().get_listening_port()
-	print('3')
-	gateways[i].java_gateway_server.resetCallbackClient(gateways[i].java_gateway_server.getCallbackClient().getAddress(), python_ports[i])
-	print('4')
-	managers[i] = gateways[i].entry_point
-
-if __name__ == '__main__':
+if __name__ == "__main__":
 	run(config_path)

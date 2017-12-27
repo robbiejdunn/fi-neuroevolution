@@ -8,7 +8,7 @@ import sys
 import time
 from py4j.java_gateway import JavaGateway, GatewayParameters, CallbackServerParameters, get_field
 
-num_threads = 4
+num_threads = 1
 
 global used
 used = [False] * num_threads
@@ -23,12 +23,13 @@ def evala(genome, config):
 	for i in range(len(used)):
 		if used[i] == False:
 			used[i] = True
+			time.sleep(10)
 			print('5')
-			managers[i].registerAI("NeatAI", NeatAI(gateways[i], genome, net))
+			manager.registerAI("NeatAI", NeatAI(gateway, genome, net))
 			print('6')
-			game = managers[i].createGame("ZEN", "ZEN", "NeatAI", "IncStage0")
+			game = manager.createGame("ZEN", "ZEN", "NeatAI", "IncStage0")
 			print('7')
-			managers[i].runGame(game)
+			manager.runGame(game)
 			sys.stdout.flush()
 			print('fini')
 			used[i] = False
@@ -85,6 +86,7 @@ class NeatAI(object):
 		self.cc.setFrameData(self.frameData, self.player)
 
 	def initialize(self, gameData, player):
+		print('reached init')
 		self.inputKey = self.gateway.jvm.structs.Key()
 		self.frameData = self.gateway.jvm.structs.FrameData()
 		self.cc = self.gateway.jvm.commandcenter.CommandCenter()
@@ -273,17 +275,20 @@ config_path = os.path.join(local_dir, 'config-fightingice')
 gateways = [0] * num_threads
 python_ports = [0] * num_threads
 managers = [0] * num_threads
+pro = subprocess.Popen("C:\\Users\\Robbie\\Documents\\FightingICE-neuroevolution\\FightingICE\\FI1.bat", creationflags=subprocess.CREATE_NEW_CONSOLE)
+time.sleep(5)
 
+subprocess.Popen("TASKKILL /F /PID {} /T".format(pro.pid))
+print('1')
+gateway = JavaGateway(gateway_parameters=GatewayParameters(port=(4000)), callback_server_parameters=CallbackServerParameters(port=0))
+print('2')
+python_port = gateway.get_callback_server().get_listening_port()
+print('3')
+gateway.java_gateway_server.resetCallbackClient(gateway.java_gateway_server.getCallbackClient().getAddress(), python_port)
+print('4')
+manager = gateway.entry_point
 # for i in range(num_threads):
-for i in range(num_threads):
-	print('1')
-	gateways[i] = JavaGateway(gateway_parameters=GatewayParameters(port=(4000 + i)), callback_server_parameters=CallbackServerParameters(port=0))
-	print('2')
-	python_ports[i] = gateways[i].get_callback_server().get_listening_port()
-	print('3')
-	gateways[i].java_gateway_server.resetCallbackClient(gateways[i].java_gateway_server.getCallbackClient().getAddress(), python_ports[i])
-	print('4')
-	managers[i] = gateways[i].entry_point
+
 
 if __name__ == '__main__':
 	run(config_path)
