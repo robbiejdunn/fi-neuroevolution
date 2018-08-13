@@ -1,8 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="jar" name="ActionSwitch">
-    <output-path>$PROJECT_DIR$/FightingICE/data/ai</output-path>
-    <root id="archive" name="ActionSwitch.jar">
-      <element id="module-output" name="Agent Actions" />
-    </root>
-  </artifact>
-</component>

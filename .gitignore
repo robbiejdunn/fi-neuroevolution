@@ -1,3 +1,10 @@
 antbin/*
 FightingICE/*
-out/*
+**/out/*
+**/target/*
+**/*.iml
+**/.idea/
+**/pom.xml
+**/*.class
+**/neat-checkpoint*
+**/__pycache__/
