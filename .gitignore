@@ -1,11 +1,38 @@
-antbin/*
-FightingICE/*
-**/out/*
-**/target/*
-**/*.iml
-**/.idea/
-**/pom.xml
-**/*.class
-**/neat-checkpoint*
+FTG4.50/
+
+venv/
+env/
+
+# ide / editor
+.idea/
+.vscode/
+*.iml
+*.code-workspace
+
+# os
+**/.DS_Store
+
+# python
 **/__pycache__/
-ahni/*
+*.pyc
+
+# coverage and test files
+.coverage
+.coverage*
+.tox/
+htmlcov/
+htmltypecov/
+
+# build files
+MANIFEST
+build/
+*.egg-info/
+dist/
+
+docs/_build/
+
+# mypy files
+/.mypy_cache/
+
+*.log*
+
