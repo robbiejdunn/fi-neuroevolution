@@ -1,7 +1,6 @@
 FTG4.50/
 
 venv/
-env/
 
 # ide / editor
 .idea/
