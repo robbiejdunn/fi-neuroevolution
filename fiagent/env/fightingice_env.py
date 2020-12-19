@@ -3,12 +3,22 @@ import os
 import platform
 import time
 
+from multiprocessing import Pipe
 from py4j.java_gateway import CallbackServerParameters, GatewayParameters, JavaGateway
 from subprocess import PIPE, Popen
+from threading import Thread
 
+from fiagent.env.gym_ai import GymAI
 from fiagent.env.action import ACTIONS
 from fiagent.env.agents.machete import Machete
 from fiagent.env.utils import on_parent_exit, RunningOS
+
+
+def game_thread(env):
+    try:
+        env.manager.runGame(env.game_to_start)
+    except Exception as e:
+        print("EXCEPTION: {}".format(e))
 
 
 class FightingICETrain(gym.Env):
@@ -46,8 +56,7 @@ class FightingICETrain(gym.Env):
 
         self._launch_game(classpath_str, port)
     
-    @staticmethod
-    def _launch_game(classpath: str, port: int):
+    def _launch_game(self, classpath: str, port: int):
         print("Launching game")
         java_home = os.environ.get("JAVA_HOME")
         if java_home:
@@ -75,30 +84,23 @@ class FightingICETrain(gym.Env):
         java_gateway.java_gateway_server.resetCallbackClient(java_gateway.java_gateway_server.getCallbackClient().getAddress(), python_port)
         #java_gateway = JavaGateway(java_process=proc, gateway_parameters=GatewayParameters(port=4242), callback_server_parameters=CallbackServerParameters(port=0))
         print("Creating manager")
-        manager = java_gateway.entry_point
+        self.manager = java_gateway.entry_point
         print("Creating Machete AI")
         machete_ai = Machete(java_gateway)
         print("Registering Machete AI")
         machete_cname = machete_ai.__class__.__name__
-        manager.registerAI(machete_cname, machete_ai)
+        self.manager.registerAI(machete_cname, machete_ai)
+        print("Registering Mercy AI")
+        server, client = Pipe()
+        self.pipe = server
+        self.p1 = GymAI(java_gateway, client, True)
+        self.manager.registerAI(self.p1.__class__.__name__, self.p1)
         print("Creating game")
-        game_to_start = manager.createGame("ZEN", "ZEN", machete_cname, machete_cname, 3)
+        self.game_to_start = self.manager.createGame("ZEN", "ZEN", self.p1.__class__.__name__, machete_cname, 3)
         print("Running game")
+        self.game_thread = Thread(target=game_thread, name="game_thread", args=(self,))
+        self.game_thread.start()
         
-        manager.runGame(game_to_start)
-        print("Game over")
-
-        proc.terminate()
-        exit()
-        # launch_gateway can't be used because it expects a port in stdout which isn't implemented
-
-        manager = jg.entry_point
-
-        game_to_start = manager.createGame("ZEN", "ZEN", Machete, Machete, 3)
-
-        manager.runGame(game_to_start)
-        print(jg)
-
     @staticmethod
     def _get_paths(java_env_path: str, os_type: RunningOS):
         """Determines the paths required for running the game"""
@@ -125,12 +127,19 @@ class FightingICETrain(gym.Env):
         return jar_path, lwjgl_all, system_lib_all, lib_all, ai_all 
         
     def reset(self):
-        # start game
-        return self._get_obs()
+        self.pipe.send("reset")
+        obs = self.pipe.recv()
+        return obs
 
     def close(self):
         print("Closing environment")
         self.gateway.shutdown()
+
+    def step(self, action):
+        print("STEPPED")
+        self.pipe.send(["step", action])
+        new_obs, reward, done, info = self.pipe.recv()
+        return new_obs, reward, done, {}
 
 
 if __name__ == "__main__":
