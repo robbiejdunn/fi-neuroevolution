@@ -65,7 +65,7 @@ class FightingICETrain(gym.Env):
         else:
             print('$JAVA_HOME not set, attempting to use "java"')
             java_path = "java"
-        javaopts = ["Main", "--port", "4242", "--py4j", "--fastmode", "--grey-bg", "--inverted-player", "1", "--mute"]
+        javaopts = ["Main", "--port", "4242", "--py4j", "--fastmode", "--disable-window", "--inverted-player", "1"]
         print("Javaopts = {}".format(javaopts))
         #command = [java_path, "-classpath", classpath] + javaopts + ["py4j.GatewayServer"]
         command = [java_path, "-classpath", classpath] + javaopts
@@ -93,7 +93,7 @@ class FightingICETrain(gym.Env):
         print("Registering Mercy AI")
         server, client = Pipe()
         self.pipe = server
-        self.p1 = GymAI(java_gateway, client, True)
+        self.p1 = GymAI(java_gateway, client, False)
         self.manager.registerAI(self.p1.__class__.__name__, self.p1)
         print("Creating game")
         self.game_to_start = self.manager.createGame("ZEN", "ZEN", self.p1.__class__.__name__, machete_cname, 3)
@@ -136,7 +136,6 @@ class FightingICETrain(gym.Env):
         self.gateway.shutdown()
 
     def step(self, action):
-        print("STEPPED")
         self.pipe.send(["step", action])
         new_obs, reward, done, info = self.pipe.recv()
         return new_obs, reward, done, {}

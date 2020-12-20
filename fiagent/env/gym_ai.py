@@ -36,7 +36,6 @@ class GymAI(object):
 
     # please define this method when you use FightingICE version 3.20 or later
     def roundEnd(self, x, y, z):
-        print("send round end to {}".format(self.pipe))
         self.pipe.send([self.obs, 0, True, None])
         self.just_inited = True
         # request = self.pipe.recv()
@@ -63,7 +62,6 @@ class GymAI(object):
         pass
 
     def processing(self):
-        print("PROCESSING")
         if self.frameData.getEmptyFlag() or self.frameData.getRemainingTime() <= 0:
             self.isGameJustStarted = True
             return
@@ -90,6 +88,7 @@ class GymAI(object):
         # if not just inited but self.obs is none, it means second/thrid round just started
         # should return only obs for reset()
         elif self.obs is None:
+            print("Second round?")
             self.obs = self.get_obs()
             self.pipe.send(self.obs)
         # if there is self.obs, do step() and return [obs, reward, done, info]
@@ -97,10 +96,7 @@ class GymAI(object):
             self.obs = self.get_obs()
             self.reward = self.get_reward()
             self.pipe.send([self.obs, self.reward, False, None])
-
-        print("waitting for step in {}".format(self.pipe))
         request = self.pipe.recv()
-        print("get step in {}".format(self.pipe))
         if len(request) == 2 and request[0] == "step":
             action = request[1]
             self.cc.commandCall(self.action_strs[action])
