@@ -9,7 +9,9 @@ class GymAI(object):
 
         self.width = 96  # The width of the display to obtain
         self.height = 64  # The height of the display to obtain
-        self.grayscale = True  # The display's color to obtain true for grayscale, false for RGB
+        self.grayscale = (
+            True  # The display's color to obtain true for grayscale, false for RGB
+        )
 
         self.obs = None
         self.just_inited = True
@@ -113,9 +115,9 @@ class GymAI(object):
                 p2_hp_now = self.frameData.getCharacter(False).getHp()
                 p1_hp_now = self.frameData.getCharacter(True).getHp()
                 if self.player:
-                    reward = (p2_hp_pre-p2_hp_now) - (p1_hp_pre-p1_hp_now)
+                    reward = (p2_hp_pre - p2_hp_now) - (p1_hp_pre - p1_hp_now)
                 else:
-                    reward = (p1_hp_pre-p1_hp_now) - (p2_hp_pre-p2_hp_now)
+                    reward = (p1_hp_pre - p1_hp_now) - (p2_hp_pre - p2_hp_now)
         except:
             reward = 0
         return reward
@@ -201,27 +203,57 @@ class GymAI(object):
 
         if len(myProjectiles) == 2:
             myHitDamage = myProjectiles[0].getHitDamage() / 200.0
-            myHitAreaNowX = ((myProjectiles[0].getCurrentHitArea().getLeft() + myProjectiles[
-                0].getCurrentHitArea().getRight()) / 2) / 960.0
-            myHitAreaNowY = ((myProjectiles[0].getCurrentHitArea().getTop() + myProjectiles[
-                0].getCurrentHitArea().getBottom()) / 2) / 640.0
+            myHitAreaNowX = (
+                (
+                    myProjectiles[0].getCurrentHitArea().getLeft()
+                    + myProjectiles[0].getCurrentHitArea().getRight()
+                )
+                / 2
+            ) / 960.0
+            myHitAreaNowY = (
+                (
+                    myProjectiles[0].getCurrentHitArea().getTop()
+                    + myProjectiles[0].getCurrentHitArea().getBottom()
+                )
+                / 2
+            ) / 640.0
             observation.append(myHitDamage)
             observation.append(myHitAreaNowX)
             observation.append(myHitAreaNowY)
             myHitDamage = myProjectiles[1].getHitDamage() / 200.0
-            myHitAreaNowX = ((myProjectiles[1].getCurrentHitArea().getLeft() + myProjectiles[
-                1].getCurrentHitArea().getRight()) / 2) / 960.0
-            myHitAreaNowY = ((myProjectiles[1].getCurrentHitArea().getTop() + myProjectiles[
-                1].getCurrentHitArea().getBottom()) / 2) / 640.0
+            myHitAreaNowX = (
+                (
+                    myProjectiles[1].getCurrentHitArea().getLeft()
+                    + myProjectiles[1].getCurrentHitArea().getRight()
+                )
+                / 2
+            ) / 960.0
+            myHitAreaNowY = (
+                (
+                    myProjectiles[1].getCurrentHitArea().getTop()
+                    + myProjectiles[1].getCurrentHitArea().getBottom()
+                )
+                / 2
+            ) / 640.0
             observation.append(myHitDamage)
             observation.append(myHitAreaNowX)
             observation.append(myHitAreaNowY)
         elif len(myProjectiles) == 1:
             myHitDamage = myProjectiles[0].getHitDamage() / 200.0
-            myHitAreaNowX = ((myProjectiles[0].getCurrentHitArea().getLeft() + myProjectiles[
-                0].getCurrentHitArea().getRight()) / 2) / 960.0
-            myHitAreaNowY = ((myProjectiles[0].getCurrentHitArea().getTop() + myProjectiles[
-                0].getCurrentHitArea().getBottom()) / 2) / 640.0
+            myHitAreaNowX = (
+                (
+                    myProjectiles[0].getCurrentHitArea().getLeft()
+                    + myProjectiles[0].getCurrentHitArea().getRight()
+                )
+                / 2
+            ) / 960.0
+            myHitAreaNowY = (
+                (
+                    myProjectiles[0].getCurrentHitArea().getTop()
+                    + myProjectiles[0].getCurrentHitArea().getBottom()
+                )
+                / 2
+            ) / 640.0
             observation.append(myHitDamage)
             observation.append(myHitAreaNowX)
             observation.append(myHitAreaNowY)
@@ -233,27 +265,57 @@ class GymAI(object):
 
         if len(oppProjectiles) == 2:
             oppHitDamage = oppProjectiles[0].getHitDamage() / 200.0
-            oppHitAreaNowX = ((oppProjectiles[0].getCurrentHitArea().getLeft() + oppProjectiles[
-                0].getCurrentHitArea().getRight()) / 2) / 960.0
-            oppHitAreaNowY = ((oppProjectiles[0].getCurrentHitArea().getTop() + oppProjectiles[
-                0].getCurrentHitArea().getBottom()) / 2) / 640.0
+            oppHitAreaNowX = (
+                (
+                    oppProjectiles[0].getCurrentHitArea().getLeft()
+                    + oppProjectiles[0].getCurrentHitArea().getRight()
+                )
+                / 2
+            ) / 960.0
+            oppHitAreaNowY = (
+                (
+                    oppProjectiles[0].getCurrentHitArea().getTop()
+                    + oppProjectiles[0].getCurrentHitArea().getBottom()
+                )
+                / 2
+            ) / 640.0
             observation.append(oppHitDamage)
             observation.append(oppHitAreaNowX)
             observation.append(oppHitAreaNowY)
             oppHitDamage = oppProjectiles[1].getHitDamage() / 200.0
-            oppHitAreaNowX = ((oppProjectiles[1].getCurrentHitArea().getLeft() + oppProjectiles[
-                1].getCurrentHitArea().getRight()) / 2) / 960.0
-            oppHitAreaNowY = ((oppProjectiles[1].getCurrentHitArea().getTop() + oppProjectiles[
-                1].getCurrentHitArea().getBottom()) / 2) / 640.0
+            oppHitAreaNowX = (
+                (
+                    oppProjectiles[1].getCurrentHitArea().getLeft()
+                    + oppProjectiles[1].getCurrentHitArea().getRight()
+                )
+                / 2
+            ) / 960.0
+            oppHitAreaNowY = (
+                (
+                    oppProjectiles[1].getCurrentHitArea().getTop()
+                    + oppProjectiles[1].getCurrentHitArea().getBottom()
+                )
+                / 2
+            ) / 640.0
             observation.append(oppHitDamage)
             observation.append(oppHitAreaNowX)
             observation.append(oppHitAreaNowY)
         elif len(oppProjectiles) == 1:
             oppHitDamage = oppProjectiles[0].getHitDamage() / 200.0
-            oppHitAreaNowX = ((oppProjectiles[0].getCurrentHitArea().getLeft() + oppProjectiles[
-                0].getCurrentHitArea().getRight()) / 2) / 960.0
-            oppHitAreaNowY = ((oppProjectiles[0].getCurrentHitArea().getTop() + oppProjectiles[
-                0].getCurrentHitArea().getBottom()) / 2) / 640.0
+            oppHitAreaNowX = (
+                (
+                    oppProjectiles[0].getCurrentHitArea().getLeft()
+                    + oppProjectiles[0].getCurrentHitArea().getRight()
+                )
+                / 2
+            ) / 960.0
+            oppHitAreaNowY = (
+                (
+                    oppProjectiles[0].getCurrentHitArea().getTop()
+                    + oppProjectiles[0].getCurrentHitArea().getBottom()
+                )
+                / 2
+            ) / 640.0
             observation.append(oppHitDamage)
             observation.append(oppHitAreaNowX)
             observation.append(oppHitAreaNowY)

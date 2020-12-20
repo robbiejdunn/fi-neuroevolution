@@ -26,7 +26,7 @@ class FightingICETrain(gym.Env):
         print("Initialising fightingice gym environment")
         self.observation_space = gym.spaces.Box(low=0, high=1, shape=(143,))
         self.action_space = gym.spaces.Discrete(len(ACTIONS))
-        
+
         file_path = os.path.realpath(__file__)
         java_env_path = os.path.abspath(os.path.join(file_path, "../../../FTG4.50"))
         print("Java env path = {}".format(java_env_path))
@@ -44,9 +44,11 @@ class FightingICETrain(gym.Env):
         else:
             raise SystemError("Unsupported OS: {}".format(os_name))
         print("Running on OS = {}".format(os_type.value))
-        
-        jar_path, lwjgl_path, system_lib_path, lib_path, ai_path = self._get_paths(java_env_path, os_type)
-        
+
+        jar_path, lwjgl_path, system_lib_path, lib_path, ai_path = self._get_paths(
+            java_env_path, os_type
+        )
+
         classpath_items = [jar_path, lwjgl_path, system_lib_path, lib_path, ai_path]
         if os_type is RunningOS.WINDOWS:
             classpath_str = ";".joion(classpath_items)
@@ -55,7 +57,7 @@ class FightingICETrain(gym.Env):
         print("Classpath string = {}".format(classpath_str))
 
         self._launch_game(classpath_str, port)
-    
+
     def _launch_game(self, classpath: str, port: int):
         print("Launching game")
         java_home = os.environ.get("JAVA_HOME")
@@ -65,24 +67,44 @@ class FightingICETrain(gym.Env):
         else:
             print('$JAVA_HOME not set, attempting to use "java"')
             java_path = "java"
-        javaopts = ["Main", "--port", "4242", "--py4j", "--fastmode", "--disable-window", "--inverted-player", "1"]
+        javaopts = [
+            "Main",
+            "--port",
+            "4242",
+            "--py4j",
+            "--fastmode",
+            "--disable-window",
+            "--inverted-player",
+            "1",
+        ]
         print("Javaopts = {}".format(javaopts))
-        #command = [java_path, "-classpath", classpath] + javaopts + ["py4j.GatewayServer"]
+        # command = [java_path, "-classpath", classpath] + javaopts + ["py4j.GatewayServer"]
         command = [java_path, "-classpath", classpath] + javaopts
         print("Command = {}".format(command))
-        
+
         # TODO: this can be improved so that it takes relative path from project root
-        fi_dir = os.path.abspath(os.path.join(os.path.realpath(__file__), "..", "..", "..", "FTG4.50"))
+        fi_dir = os.path.abspath(
+            os.path.join(os.path.realpath(__file__), "..", "..", "..", "FTG4.50")
+        )
         print("Creating subprocess with working directory = {}".format(fi_dir))
-        proc = Popen(command, stdout=PIPE, preexec_fn=on_parent_exit("SIGTERM"), cwd=fi_dir)
+        proc = Popen(
+            command, stdout=PIPE, preexec_fn=on_parent_exit("SIGTERM"), cwd=fi_dir
+        )
         time.sleep(5)
-        #java_gateway = JavaGateway(gateway_parameters=GatewayParameters(port=4242), callback_server_parameters=CallbackServerParameters(port=0))
-        #python_port = java_gateway.get_callback_server().get_listening_port()
-        #java_gateway.java_gateway_server.resetCallbackClient(java_gateway.java_gateway_server.getCallbackClient().getAddress(), python_port)
-        java_gateway = JavaGateway(java_process=proc, gateway_parameters=GatewayParameters(port=4242), callback_server_parameters=CallbackServerParameters(port=0))
+        # java_gateway = JavaGateway(gateway_parameters=GatewayParameters(port=4242), callback_server_parameters=CallbackServerParameters(port=0))
+        # python_port = java_gateway.get_callback_server().get_listening_port()
+        # java_gateway.java_gateway_server.resetCallbackClient(java_gateway.java_gateway_server.getCallbackClient().getAddress(), python_port)
+        java_gateway = JavaGateway(
+            java_process=proc,
+            gateway_parameters=GatewayParameters(port=4242),
+            callback_server_parameters=CallbackServerParameters(port=0),
+        )
         python_port = java_gateway.get_callback_server().get_listening_port()
-        java_gateway.java_gateway_server.resetCallbackClient(java_gateway.java_gateway_server.getCallbackClient().getAddress(), python_port)
-        #java_gateway = JavaGateway(java_process=proc, gateway_parameters=GatewayParameters(port=4242), callback_server_parameters=CallbackServerParameters(port=0))
+        java_gateway.java_gateway_server.resetCallbackClient(
+            java_gateway.java_gateway_server.getCallbackClient().getAddress(),
+            python_port,
+        )
+        # java_gateway = JavaGateway(java_process=proc, gateway_parameters=GatewayParameters(port=4242), callback_server_parameters=CallbackServerParameters(port=0))
         print("Creating manager")
         self.manager = java_gateway.entry_point
         print("Creating Machete AI")
@@ -96,11 +118,13 @@ class FightingICETrain(gym.Env):
         self.p1 = GymAI(java_gateway, client, False)
         self.manager.registerAI(self.p1.__class__.__name__, self.p1)
         print("Creating game")
-        self.game_to_start = self.manager.createGame("ZEN", "ZEN", self.p1.__class__.__name__, machete_cname, 3)
+        self.game_to_start = self.manager.createGame(
+            "ZEN", "ZEN", self.p1.__class__.__name__, machete_cname, 3
+        )
         print("Running game")
         self.game_thread = Thread(target=game_thread, name="game_thread", args=(self,))
         self.game_thread.start()
-        
+
     @staticmethod
     def _get_paths(java_env_path: str, os_type: RunningOS):
         """Determines the paths required for running the game"""
@@ -109,23 +133,32 @@ class FightingICETrain(gym.Env):
         data_path = os.path.join(java_env_path, "data")
         print("Data path = {}".format(data_path))
         lib_path = os.path.join(java_env_path, "lib")
-        print("Lib path = {}".format(lib_path)) 
+        print("Lib path = {}".format(lib_path))
         system_lib_path = os.path.join(lib_path, "natives", os_type.value)
         print("System lib path = {}".format(system_lib_path))
         ai_path = os.path.join(java_env_path, "data", "ai")
         print("AI path = {}".format(ai_path))
         lwjgl_path = os.path.join(lib_path, "lwjgl")
         print("LWJGL path = {}".format(lwjgl_path))
-        for path in [jar_path, data_path, lib_path, system_lib_path, ai_path, lwjgl_path]:
+        for path in [
+            jar_path,
+            data_path,
+            lib_path,
+            system_lib_path,
+            ai_path,
+            lwjgl_path,
+        ]:
             if not os.path.exists(path):
                 # TODO: use a better error type
-                raise SystemError("Path {} not found. Check FightingICE installation".format(path))
+                raise SystemError(
+                    "Path {} not found. Check FightingICE installation".format(path)
+                )
         lwjgl_all = os.path.join(lwjgl_path, "*")
         lib_all = os.path.join(lib_path, "*")
         system_lib_all = os.path.join(system_lib_path, "*")
         ai_all = os.path.join(ai_path, "*")
-        return jar_path, lwjgl_all, system_lib_all, lib_all, ai_all 
-        
+        return jar_path, lwjgl_all, system_lib_all, lib_all, ai_all
+
     def reset(self):
         self.pipe.send("reset")
         obs = self.pipe.recv()
