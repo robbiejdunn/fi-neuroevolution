@@ -44,7 +44,7 @@ if __name__ == "__main__":
     p.add_reporter(neat.Checkpointer(5))
 
     winner = p.run(eval_genomes, 10)
-    #visualize.draw_net(config, winner, filename="net.svg")
+    # visualize.draw_net(config, winner, filename="net.svg")
     visualize.plot_stats(stats, ylog=False, filename="stats.svg")
     visualize.plot_species(stats, filename="species.svg")
     print("FINISHED")
