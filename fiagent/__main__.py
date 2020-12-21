@@ -4,6 +4,8 @@ import os
 
 from gym.envs.registration import register
 
+from fiagent import visualize
+
 
 register(id="FightingICETrain-v0", entry_point="fiagent.env:FightingICETrain")
 env = gym.make("FightingICETrain-v0")
@@ -17,9 +19,9 @@ def eval_genomes(genomes, config):
         obs = env.reset()
         done = False
         while not done:
-            # nn_output = net.activate(obs)
-            # action = nn_output.index(max(nn_output))
-            obs, reward, done, info = env.step(1)
+            nn_output = net.activate(obs)
+            action = nn_output.index(max(nn_output))
+            obs, reward, done, info = env.step(action)
             genome.fitness += reward
         print("Genome {} processed. Fitness = {}".format(genome_id, genome.fitness))
 
@@ -41,4 +43,8 @@ if __name__ == "__main__":
     p.add_reporter(stats)
     p.add_reporter(neat.Checkpointer(5))
 
-    winner = p.run(eval_genomes, 4)
+    winner = p.run(eval_genomes, 10)
+    #visualize.draw_net(config, winner, filename="net.svg")
+    visualize.plot_stats(stats, ylog=False, filename="stats.svg")
+    visualize.plot_species(stats, filename="species.svg")
+    print("FINISHED")
