@@ -30,8 +30,8 @@ class FightingICETrain(gym.Env):
         file_path = os.path.realpath(__file__)
         java_env_path = os.path.abspath(os.path.join(file_path, "../../../FTG4.50"))
         print("Java env path = {}".format(java_env_path))
-        port = 4296
-        print("Java port = {}".format(port))
+        self.port = 4296
+        print("Java port = {}".format(self.port))
 
         # determine running OS- needed for finding platform specific files
         os_name = platform.system()
@@ -51,15 +51,11 @@ class FightingICETrain(gym.Env):
 
         classpath_items = [jar_path, lwjgl_path, system_lib_path, lib_path, ai_path]
         if os_type is RunningOS.WINDOWS:
-            classpath_str = ";".joion(classpath_items)
+            classpath_str = ";".join(classpath_items)
         else:
             classpath_str = ":".join(classpath_items)
         print("Classpath string = {}".format(classpath_str))
 
-        self._launch_game(classpath_str, port)
-
-    def _launch_game(self, classpath: str, port: int):
-        print("Launching game")
         java_home = os.environ.get("JAVA_HOME")
         if java_home:
             java_path = os.path.join(java_home, "bin", "java")
@@ -70,7 +66,7 @@ class FightingICETrain(gym.Env):
         javaopts = [
             "Main",
             "--port",
-            "4242",
+            str(self.port),
             "--py4j",
             "--fastmode",
             "--disable-window",
@@ -78,44 +74,41 @@ class FightingICETrain(gym.Env):
             "1",
         ]
         print("Javaopts = {}".format(javaopts))
-        # command = [java_path, "-classpath", classpath] + javaopts + ["py4j.GatewayServer"]
-        command = [java_path, "-classpath", classpath] + javaopts
-        print("Command = {}".format(command))
-
+        self.command = [java_path, "-classpath", classpath_str] + javaopts
+        print("Command = {}".format(self.command))
         # TODO: this can be improved so that it takes relative path from project root
-        fi_dir = os.path.abspath(
+        self.fi_dir = os.path.abspath(
             os.path.join(os.path.realpath(__file__), "..", "..", "..", "FTG4.50")
         )
-        print("Creating subprocess with working directory = {}".format(fi_dir))
-        proc = Popen(
-            command, stdout=PIPE, preexec_fn=on_parent_exit("SIGTERM"), cwd=fi_dir
+        self._launch_game()
+
+    def _launch_game(self):
+        print("Creating subprocess with working directory = {}".format(self.fi_dir))
+        self.proc = Popen(
+            self.command, stdout=PIPE, preexec_fn=on_parent_exit("SIGTERM"), cwd=self.fi_dir
         )
         time.sleep(5)
-        # java_gateway = JavaGateway(gateway_parameters=GatewayParameters(port=4242), callback_server_parameters=CallbackServerParameters(port=0))
-        # python_port = java_gateway.get_callback_server().get_listening_port()
-        # java_gateway.java_gateway_server.resetCallbackClient(java_gateway.java_gateway_server.getCallbackClient().getAddress(), python_port)
-        java_gateway = JavaGateway(
-            java_process=proc,
-            gateway_parameters=GatewayParameters(port=4242),
+        self.java_gateway = JavaGateway(
+            java_process=self.proc,
+            gateway_parameters=GatewayParameters(port=self.port),
             callback_server_parameters=CallbackServerParameters(port=0),
         )
-        python_port = java_gateway.get_callback_server().get_listening_port()
-        java_gateway.java_gateway_server.resetCallbackClient(
-            java_gateway.java_gateway_server.getCallbackClient().getAddress(),
+        python_port = self.java_gateway.get_callback_server().get_listening_port()
+        self.java_gateway.java_gateway_server.resetCallbackClient(
+                self.java_gateway.java_gateway_server.getCallbackClient().getAddress(),
             python_port,
         )
-        # java_gateway = JavaGateway(java_process=proc, gateway_parameters=GatewayParameters(port=4242), callback_server_parameters=CallbackServerParameters(port=0))
         print("Creating manager")
-        self.manager = java_gateway.entry_point
+        self.manager = self.java_gateway.entry_point
         print("Creating Machete AI")
-        machete_ai = Machete(java_gateway)
+        machete_ai = Machete(self.java_gateway)
         print("Registering Machete AI")
         machete_cname = machete_ai.__class__.__name__
         self.manager.registerAI(machete_cname, machete_ai)
         print("Registering Mercy AI")
         server, client = Pipe()
         self.pipe = server
-        self.p1 = GymAI(java_gateway, client, False)
+        self.p1 = GymAI(self.java_gateway, client, False)
         self.manager.registerAI(self.p1.__class__.__name__, self.p1)
         print("Creating game")
         self.game_to_start = self.manager.createGame(
@@ -163,6 +156,7 @@ class FightingICETrain(gym.Env):
         self.pipe.send("reset")
         obs = self.pipe.recv()
         return obs
+
 
     def close(self):
         print("Closing environment")
